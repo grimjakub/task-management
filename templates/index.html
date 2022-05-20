@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My tasks</title>
+    <!-- bootstrap and fontawesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/efdaec7388.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container h-100 d-flex justify-content-center">
+        <h1 class="display-3">My tasks</h1>
+        <div class="jumbotron my-auto">
+            <ul>
+                {% for task in tasks %}
+                <li>
+                    <a href="{{ url_for('delete', id=task.id) }}"><i class="fa-solid fa-circle-minus "></i></a>
+                    <p style="display:inline">{{task.title}}</p>
+                    <a href=" "><i class="fa-solid fa-pen-to-square "></i></a>
+                </li>
+                {% endfor %}
+                <li>
+                    <a href="add"><i class="fa-solid fa-plus "></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
