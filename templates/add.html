@@ -5,24 +5,37 @@
     <meta charset="UTF-8">
     <title>Add Book</title>
     <!-- bootstrap and fontawesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/efdaec7388.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/efdaec7388.js"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
-
-    <div class="container h-100 d-flex justify-content-center">
-        <h1 class="display-3">My tasks</h1>
-        <div class="jumbotron my-auto"></div>
-        <form action="" method="POST">
-            <label>Book Name</label>
-            <input name="title" type="text">
-            <label>Book Author</label>
-            <input name="description" type="text">
-            <button type="submit">Add Task</button>
+<!--style="background:red, max-width: 300px"-->
+<div class="container h-100 d-flex justify-content-center" >
+    <h1 class="display-3">Add a new task</h1>
+    <div class=" my-auto" >
+    <form action="" method="POST">
+        <div class="form-group">
+            <label >Task Name:</label>
+            <input type="text" class="form-control" name="title">
+        </div>
+        <div class="form-group">
+            <label for="comment">Task description</label>
+            <textarea class="form-control" rows="5" id="comment" name="description" type="text"></textarea>
+        </div>
+<!--        <input name="description" type="text"><br>-->
+<!--        <button type="">Add file</button>-->
+        <br>
+        <button class="btn btn-default" type="submit">Add Task</button>
+        <form>
+            <input class="btn btn-default" type="button" value="Back!" onclick="history.go(-1)">
         </form>
-    </div>
-    </div>
+    </form>
+
+</div>
+</div>
 </body>
 
 </html>

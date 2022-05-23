@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), unique=True, nullable=False)
-    description = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
 
     def __repr__(self):
         return f'<Task {self.title}>'
@@ -34,6 +34,8 @@ def home():
 @app.route("/add", methods=["GET", "POST"])
 def add():
     if request.method == "POST":
+        if request.form["title"] == "":
+            return redirect(url_for("home"))
         new_task = Task(
             title=request.form["title"],
             description=request.form["description"],
@@ -51,6 +53,13 @@ def delete():
     db.session.delete(task_to_delete)
     db.session.commit()
     return redirect(url_for("home"))
+
+
+@app.route("/detail", methods=["GET"])
+def detail():
+    task_id = request.args.get('id')
+    task_selected = Task.query.get(task_id)
+    return render_template("detail.html", task=task_selected)
 
 
 if __name__ == "__main__":
