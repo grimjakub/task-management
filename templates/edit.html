@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="display-3">Edit task</h3>
+<div class=" my-auto">
+    <form action="" method="POST">
+        <!--            task name-->
+        <div class="form-group">
+            <label>Task Name:</label>
+            <input type="text" class="form-control" name="title" placeholder={{task.title}}>
+        </div>
+        <!--            deadline-->
+        <!--            <label for="start">Deadline for task</label>-->
+        <!--            <input type="date" id="start" name="trip-start"-->
+        <!--                   value="2018-07-22"-->
+        <!--                   min="2018-01-01" max="2018-12-31">-->
+        <!--            task description-->
+        <div class="form-group">
+            <label for="comment">Task description</label>
+            <textarea class="form-control" rows="5" id="comment" name="description" type="text"
+                      placeholder={{task.description}}></textarea>
+        </div>
+        <!--        <input name="description" type="text"><br>-->
+        <!--        <button type="">Add file</button>-->
+        <br>
+        <button class="btn btn-default" type="submit">Save changes</button>
+        <form>
+            <input class="btn btn-default" type="button" value="Back!" onclick="history.go(-1)">
+        </form>
+    </form>
+
+</div>
+{% endblock %}

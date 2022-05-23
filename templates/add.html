@@ -1,32 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Add Book</title>
-    <!-- bootstrap and fontawesome -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/efdaec7388.js"
-            crossorigin="anonymous"></script>
-</head>
-
-<body>
-<!--style="background:red, max-width: 300px"-->
-<div class="container h-100 d-flex justify-content-center" >
-    <h1 class="display-3">Add a new task</h1>
-    <div class=" my-auto" >
+{% extends "base.html" %}
+{% block content %}
+<h3 >Add a new task</h3>
+<div class="">
     <form action="" method="POST">
-        <div class="form-group">
-            <label >Task Name:</label>
-            <input type="text" class="form-control" name="title">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Task Name:</label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+            </div>
+            <div class="col-sm-4"><label for="start">Deadline for task</label><br>
+                <input type="date" id="start" name="deadline"
+                ></div>
+
         </div>
+        <!--            &lt;!&ndash;            task name&ndash;&gt;-->
+        <!--            <div class="form-group">-->
+        <!--                <label>Task Name:</label>-->
+        <!--                <input type="text" class="form-control" name="title">-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            deadline&ndash;&gt;-->
+        <!--            <label for="start">Deadline for task</label>-->
+        <!--            <input type="date" id="start" name="deadline"-->
+        <!--            >-->
+        <!--            task description-->
         <div class="form-group">
             <label for="comment">Task description</label>
             <textarea class="form-control" rows="5" id="comment" name="description" type="text"></textarea>
         </div>
-<!--        <input name="description" type="text"><br>-->
-<!--        <button type="">Add file</button>-->
+        <!--        <input name="description" type="text"><br>-->
+        <!--        <button type="">Add file</button>-->
         <br>
         <button class="btn btn-default" type="submit">Add Task</button>
         <form>
@@ -35,7 +39,5 @@
     </form>
 
 </div>
-</div>
-</body>
 
-</html>
+{% endblock %}
