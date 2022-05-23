@@ -33,17 +33,20 @@ def home():
     return render_template("index.html", tasks=all_tasks)
 
 
-@app.route('/filter', methods=["GET", "POST"])
-def filter_task():
-    app.logger.warning('testing warning log')
-    app.logger.error('testing error log')
-    app.logger.info('testing info log')
+@app.route('/show_finished',methods=["GET", "POST"])
+def show_finished():
+    all_tasks = db.session.query(Task).all()
+    finished_tasks = [task for task in all_tasks if task.status == "✓"]
+    # finished_tasks=all_tasks[0]
+    return render_template("index.html", tasks=finished_tasks)
+
+
+@app.route('/', methods=["GET", "POST"])
+def search():
     if request.method == "POST":
-        searching_word = request.form["filter"]
-        if searching_word == "":
-            return redirect(url_for("home"))
-        filter_tasks = db.session.query(Task).filter(Task.title.like(searching_word))
-        return render_template("index2.html", tasks=filter_tasks)
+        searching_word = request.form["search"]
+        filter_tasks = db.session.query(Task).filter(Task.title.like(f"%{searching_word}%"))
+        return render_template("index.html", tasks=filter_tasks)
 
 
 @app.route("/add", methods=["GET", "POST"])
