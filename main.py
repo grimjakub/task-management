@@ -3,6 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, \
     current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
+
+# from datetime import datetime
 # from forms import RegisterForm, LoginForm
 # from sqlalchemy.orm import relationship
 # from sqlalchemy import ForeignKey
@@ -12,7 +16,6 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 app.config['SECRET_KEY'] = 'sdsd684f3s687ed445FDFASDF'
 db = SQLAlchemy(app)
 
@@ -72,17 +75,20 @@ def home():
 @app.route('/register', methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        new_user = User(
-            username=request.form["username"],
-            email=request.form["email"],
-            password=generate_password_hash(request.form["password"],
-                                            method="pbkdf2:sha256",
-                                            salt_length=8)
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        login_user(new_user)
-        return redirect(url_for('home'))
+        try:
+            new_user = User(
+                username=request.form["username"],
+                email=request.form["email"],
+                password=generate_password_hash(request.form["password"],
+                                                method="pbkdf2:sha256",
+                                                salt_length=8)
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            return redirect(url_for('home'))
+        except:
+            return render_template("register.html", current_user=current_user)
     return render_template("register.html", current_user=current_user)
 
 
@@ -119,6 +125,14 @@ def show_finished():
                            current_user=current_user)
 
 
+@app.route('/show_todo', methods=["GET", "POST"])
+def show_todo():
+    all_tasks = db.session.query(Task).all()
+    todo_tasks = [task for task in all_tasks if task.status == "todo"]
+    return render_template("index.html", tasks=todo_tasks,
+                           current_user=current_user)
+
+
 @app.route('/', methods=["GET", "POST"])
 def search():
     if request.method == "POST":
@@ -134,6 +148,8 @@ def add():
     if request.method == "POST":
         if request.form["title"] == "":
             return redirect(url_for("home"))
+        # f = request.files['file']
+        # f.save(secure_filename(f.filename))
         new_task = Task(
             title=request.form["title"],
             description=request.form["description"],
@@ -143,6 +159,7 @@ def add():
         )
         db.session.add(new_task)
         db.session.commit()
+
         return redirect(url_for("home"))
     return render_template("add.html", current_user=current_user)
 
@@ -178,18 +195,23 @@ def status():
 
 @app.route("/edit", methods=["GET", "POST"])
 def edit():
+    task_id = request.args.get('id')
+    task_selected = Task.query.get(task_id)
     if request.method == "POST":
         # UPDATE RECORD
-        task_id = request.form["id"]
-        task_to_update = Task.query.get(task_id)
+        # task_id = request.form["id"]
+        # task_to_update = Task.query.get(task_id)
+        task_to_update = task_selected
         task_to_update.title = request.form["title"]
         task_to_update.description = request.form["description"]
         db.session.commit()
         return redirect(url_for('home'))
-    task_id = request.args.get('id')
-    task_selected = Task.query.get(task_id)
+    # task_id = request.args.get('id')
+    # task_selected = Task.query.get(task_id)
     return render_template("edit.html", task=task_selected,
                            current_user=current_user)
+
+
 
 
 if __name__ == "__main__":

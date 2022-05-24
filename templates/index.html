@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <form action="" method="POST">
             <div class="input-group col-xs-5">
                 <input type="text" class="form-control" placeholder="Search" name="search">
@@ -17,6 +17,16 @@
             </div>
         </form>
     </div>
+
+    <div class="col-sm-2">
+        <form action="/show_todo" method="POST">
+            <button class="btn btn-default" type="submit">
+                Show todo tasks
+            </button>
+
+        </form>
+    </div>
+
     <div class="col-sm-2">
         <form action="/show_finished" method="POST">
             <button class="btn btn-default" type="submit">
@@ -24,90 +34,80 @@
             </button>
         </form>
     </div>
-    <div class="col-sm-1">
-<!--        <form action="" method="">-->
+
+    <div class="col-sm-2">
+        <!--        <form action="" method="">-->
         <a href="{{ url_for('home')}}">
             <button class="btn btn-default" type="submit">
                 Show all tasks
-            </button></a>
-<!--        </form></div>-->
-</div>
+            </button>
+        </a>
+        <!--        </form></div>-->
+    </div>
 
 
-<!--<form action="" method="POST">-->
-<!--    <div class="input-group col-xs-5">-->
-<!--        <input type="text" class="form-control" placeholder="Search" name="search">-->
-<!--        <div class="input-group-btn">-->
-<!--            &lt;!&ndash;            <a href="{{ url_for('home')}}">&ndash;&gt;-->
-<!--            <button class="btn btn-default" type="submit">-->
-<!--                <i class="glyphicon glyphicon-search"></i>-->
-<!--            </button>-->
-<!--            &lt;!&ndash;            </a>&ndash;&gt;-->
-<!--        </div>-->
+    <!--table of tasks-->
+    <table class="table">
+        <thead>
+        <tr>
+            <!--                <th scope="col">#</th>-->
+            <th scope="col">Task name</th>
+            <th scope="col">Status</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Deadline</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--            for one row-->
+        {% for task in tasks %}
+        <tr>
+            <!--                <th scope="row">-->
+            <!--                    <p style="display:inline">-->
+            <!--                        {{task.id}}</p>-->
+            <!--                </th>-->
+            <td>
+                {% if task.status=="✓": %}
+                <a href="{{ url_for('detail', id=task.id) }}" style="color: green">
+                    {{task.title}}</a>
 
-<!--    </div>-->
-<!--</form>-->
-<!--<form action="/show_finished" method="POST">-->
-<!--    <button class="btn btn-default" type="submit">-->
-<!--        Show finished tasks-->
-<!--    </button>-->
-<!--</form>-->
+                <!--                <a href="{{ url_for('detail', id=task.id) }}" style="color: red">-->
+                <!--                    {{task.title}}</a>-->
+                {% else:%}
+                <a href="{{ url_for('detail', id=task.id) }}" style="color: black">
+                    {{task.title}}</a>
+                {% endif %}
+            </td>
 
+            <td>
+                <!--                    <button>{{task.status}}</button>-->
+                <a href="{{ url_for('status', id=task.id) }}">
+                    <button class="">{{task.status}}</button>
+                </a>
+                <!--                    status-->
+            </td>
+            <td>
+                <a href="{{ url_for('delete', id=task.id) }}"><i class="fa-solid fa-circle-minus "></i></a>
+            </td>
+            <td>
+                <a href="{{ url_for('edit', id=task.id) }}"><i class="fa-solid fa-pen-to-square "></i></a>
+            </td>
+            <td>
+                {{task.deadline}}
+            </td>
 
-<!--table of tasks-->
-<table class="table">
-    <thead>
-    <tr>
-        <!--                <th scope="col">#</th>-->
-        <th scope="col">Task name</th>
-        <th scope="col">Status</th>
-        <th scope="col">Delete</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Deadline</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!--            for one row-->
-    {% for task in tasks %}
-    <tr>
-        <!--                <th scope="row">-->
-        <!--                    <p style="display:inline">-->
-        <!--                        {{task.id}}</p>-->
-        <!--                </th>-->
-        <td>
-            <a href="{{ url_for('detail', id=task.id) }}" style="color: black">
-                {{task.title}}</a>
-        </td>
-
-        <td>
-            <!--                    <button>{{task.status}}</button>-->
-            <a href="{{ url_for('status', id=task.id) }}">
-                <button class="">{{task.status}}</button>
-            </a>
-            <!--                    status-->
-        </td>
-        <td>
-            <a href="{{ url_for('delete', id=task.id) }}"><i class="fa-solid fa-circle-minus "></i></a>
-        </td>
-        <td>
-            <a href="{{ url_for('edit', id=task.id) }}"><i class="fa-solid fa-pen-to-square "></i></a>
-        </td>
-        <td>
-            {{task.deadline}}
-        </td>
-
-    </tr>
-    {% endfor %}
-    <!--end of row-->
-    <tr>
-        <th>
-        </th>
-        <td>
-            <a href="add"><i class="fa-solid fa-plus "></i></a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </tr>
+        {% endfor %}
+        <!--end of row-->
+        <tr>
+            <th>
+            </th>
+            <td>
+                <a href="add"><i class="fa-solid fa-plus "></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 
 </div>
