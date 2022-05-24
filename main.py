@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, \
     current_user, logout_user
-from forms import RegisterForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey
-import os
+# from forms import RegisterForm, LoginForm
+# from sqlalchemy.orm import relationship
+# from sqlalchemy import ForeignKey
+# import os
 
 app = Flask(__name__)
 
