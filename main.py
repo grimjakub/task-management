@@ -18,8 +18,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'sdsd684f3s687ed445FDFASDF'
-UPLOAD_FOLDER = './upload'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = 'upload/'
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
