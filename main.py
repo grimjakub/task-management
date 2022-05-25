@@ -1,16 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, \
-    send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, \
-    current_user, logout_user
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
-
-# from datetime import datetime
-# from forms import RegisterForm, LoginForm
-# from sqlalchemy.orm import relationship
-# from sqlalchemy import ForeignKey
 import os
 
 app = Flask(__name__)
@@ -62,7 +54,6 @@ def home():
     if current_user.is_active == False:
         return render_template("authentication.html",
                                current_user=current_user)
-    # all_tasks = db.session.query(Task).all()
     all_tasks = db.session.query(Task).filter(
         Task.user_id.like(current_user.id))
     return render_template("index.html", tasks=all_tasks,
@@ -92,7 +83,6 @@ def register():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        # email = request.form["email"]
         username = request.form["username"]
         password = request.form["password"]
         user = User.query.filter_by(username=username).first()
@@ -150,7 +140,7 @@ def add():
         if uploaded_file.filename != '':
             filename = secure_filename(uploaded_file.filename)
             uploaded_file.save(
-                os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         else:
             filepath = ""
@@ -170,20 +160,9 @@ def add():
     return render_template("add.html", current_user=current_user)
 
 
-@app.route('/upload_file', methods=['POST'])
-def upload_file():
-    uploaded_file = request.files['file']
-    if uploaded_file.filename != '':
-        filename = secure_filename(uploaded_file.filename)
-        uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for("add"))
-
-    # return redirect(url_for('home'))
-
-
-@app.route('/download/<path>')
-def download_file(path):
-    # path="upload/past5.png"
+@app.route('/download', methods=["GET"])
+def download_file():
+    path = request.args.get('file')
     return send_file(path, as_attachment=True)
 
 
@@ -221,16 +200,11 @@ def edit():
     task_id = request.args.get('id')
     task_selected = Task.query.get(task_id)
     if request.method == "POST":
-        # UPDATE RECORD
-        # task_id = request.form["id"]
-        # task_to_update = Task.query.get(task_id)
         task_to_update = task_selected
         task_to_update.title = request.form["title"]
         task_to_update.description = request.form["description"]
         db.session.commit()
         return redirect(url_for('home'))
-    # task_id = request.args.get('id')
-    # task_selected = Task.query.get(task_id)
     return render_template("edit.html", task=task_selected,
                            current_user=current_user)
 

@@ -8,28 +8,19 @@
             <main class="form-signin">
                 <form action="{{ url_for('login') }}" method="post">
                     <h3 class="h3 mb-3 fw-normal">Login</h3>
-<!--                                        <div class="form-floating">-->
-<!--                                            <label for="floatingInput">Email address</label>-->
-<!--                                            <input type="email" name="email" class="form-control"-->
-<!--                                                   id="floatingInput"-->
-<!--                                                   placeholder="name@example.com"-->
-<!--                                                   required="required">-->
-
-<!--                                        </div>-->
 
                     <div class="form-floating">
                         <label for="floatingName">Userame</label>
                         <input type="text" name="username" class="form-control"
                                id="floatingName" placeholder="Your username"
                                required="required">
-
                     </div>
+
                     <div class="form-floating">
                         <label for="floatingPassword">Password</label>
                         <input type="password" name="password"
                                class="form-control" id="floatingPassword"
                                placeholder="Password" required="required">
-
                     </div>
 
                     <br>
@@ -39,8 +30,6 @@
                     You can use "admin" for username and password
                 </form>
             </main>
-
-
         </div>
     </div>
 </div>
