@@ -1,22 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, \
+    send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, \
     current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import  FileStorage
+from werkzeug.datastructures import FileStorage
 
 # from datetime import datetime
 # from forms import RegisterForm, LoginForm
 # from sqlalchemy.orm import relationship
 # from sqlalchemy import ForeignKey
-# import os
+import os
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'sdsd684f3s687ed445FDFASDF'
+UPLOAD_FOLDER = './upload'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
@@ -46,6 +49,7 @@ class Task(db.Model):
     description = db.Column(db.String(500), nullable=False)
     status = db.Column(db.String(20), nullable=False)
     deadline = db.Column(db.String(30), nullable=False)
+    file_path = db.Column(db.String(250), nullable=False)
 
     def __repr__(self):
         return f'<Task {self.title}>'
@@ -54,17 +58,11 @@ class Task(db.Model):
 # db.create_all()
 
 
-# @app.route('/')
-# def index():
-#     all_tasks = db.session.query(Task).all()
-#     # return render_template("index.html", tasks=all_tasks)
-#     return render_template("authentication.html", current_user=current_user)
-
-
 @app.route('/')
 def home():
     if current_user.is_active == False:
-        return render_template("authentication.html", current_user=current_user)
+        return render_template("authentication.html",
+                               current_user=current_user)
     # all_tasks = db.session.query(Task).all()
     all_tasks = db.session.query(Task).filter(
         Task.user_id.like(current_user.id))
@@ -148,20 +146,46 @@ def add():
     if request.method == "POST":
         if request.form["title"] == "":
             return redirect(url_for("home"))
-        # f = request.files['file']
-        # f.save(secure_filename(f.filename))
+
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            filename = secure_filename(uploaded_file.filename)
+            uploaded_file.save(
+                os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        else:
+            filepath = ""
         new_task = Task(
             title=request.form["title"],
             description=request.form["description"],
             status="todo",
             deadline=request.form["deadline"],
-            user_id=current_user.id
+            user_id=current_user.id,
+            file_path=filepath
         )
+
         db.session.add(new_task)
         db.session.commit()
 
         return redirect(url_for("home"))
     return render_template("add.html", current_user=current_user)
+
+
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        filename = secure_filename(uploaded_file.filename)
+        uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return redirect(url_for("add"))
+
+    # return redirect(url_for('home'))
+
+
+@app.route('/download/<path>')
+def download_file(path):
+    # path="upload/past5.png"
+    return send_file(path, as_attachment=True)
 
 
 @app.route("/delete")
@@ -210,8 +234,6 @@ def edit():
     # task_selected = Task.query.get(task_id)
     return render_template("edit.html", task=task_selected,
                            current_user=current_user)
-
-
 
 
 if __name__ == "__main__":

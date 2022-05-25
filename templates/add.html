@@ -2,7 +2,7 @@
 {% block content %}
 <h3>Add a new task</h3>
 <div class="">
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
@@ -15,23 +15,30 @@
             </div>
 <!--            <form action="http://localhost:5000/uploader" method="POST"-->
 <!--                  enctype="multipart/form-data">-->
-<!--                <input type="file" name="file"/>-->
+            <label>Upload file</label>
+                <input type="file" name="file">
 <!--                <input type="submit"/>-->
 <!--            </form>-->
+
         </div>
+
+
 
         <div class="form-group">
             <label for="comment">Task description</label>
             <textarea class="form-control" rows="5" id="comment" name="description" type="text"></textarea>
         </div>
-        <!--        <input name="description" type="text"><br>-->
-        <!--        <button type="">Add file</button>-->
         <br>
         <button class="btn btn-default" type="submit">Add Task</button>
         <form>
             <input class="btn btn-default" type="button" value="Back!" onclick="history.go(-1)">
         </form>
     </form>
+
+<!--    <form method="POST" action="{{ url_for('upload_file') }}" enctype="multipart/form-data">-->
+<!--        <p><input type="file" name="file"></p>-->
+<!--        <p><input type="submit" value="Submit"></p>-->
+<!--    </form>-->
 
 </div>
 

@@ -2,10 +2,19 @@
 {% block content %}
 
 
-<h2>{{task.title}}</h2><br>
+<h2>Task name: {{task.title}}</h2><br>
 <h4>Description: </h4>
 <h5>{{task.description}}</h5>
 <!--    <p>Task ID: {{task.id}}</p>-->
+<br>
+<h4>File: </h4>
+
+{% if task.file_path=="": %}
+<h5>No file</h5>
+{% else: %}
+
+<a href="{{ url_for('download_file',path=task.file_path) }}" ><h5>Download file</h5></a>
+{% endif %}
 <br>
 <form>
     <input type="button" value="Back!" onclick="history.go(-1)">
