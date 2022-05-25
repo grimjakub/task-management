@@ -106,7 +106,7 @@ def logout():
 
 @app.route('/show_finished', methods=["GET", "POST"])
 def show_finished():
-    all_tasks = db.session.query(Task).all()
+    all_tasks = db.session.query(Task).filter(Task.user_id.like(current_user.id))
     finished_tasks = [task for task in all_tasks if task.status == "✓"]
     return render_template("index.html", tasks=finished_tasks,
                            current_user=current_user)
@@ -114,7 +114,7 @@ def show_finished():
 
 @app.route('/show_todo', methods=["GET", "POST"])
 def show_todo():
-    all_tasks = db.session.query(Task).all()
+    all_tasks = db.session.query(Task).filter(Task.user_id.like(current_user.id))
     todo_tasks = [task for task in all_tasks if task.status == "todo"]
     return render_template("index.html", tasks=todo_tasks,
                            current_user=current_user)
