@@ -2,6 +2,6 @@
 
 Python task management app
 
-App is builded with flask and SQLAlchemy. Design was made with Bootstrap.
+The app is built with flask and SQLAlchemy. The design was made with Bootstrap.
 
 Required packages are in requirements.txt
